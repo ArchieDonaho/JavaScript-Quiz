@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;   
+    box-sizing: border-box;
+    /* border: 1px solid black; */
+    font-size: 30px;
+}
+
+.display-none {
+    display: none;
+}
+
+.display-block {
+    display: block;
+}
+
+header {
+    display: flex;
+    text-align: center;
+}
+
+.header-small {
+    flex: 1;
+    font-size: 40px;
+}
+
+.header-big {
+    flex: 3;
+    font-size: 60px;
+}
+
+main {
+    text-align: center;
+    margin: 5% 15%;
+}
+
+main > * {
+    padding: 20px;
+}
+
+#description, #answer-list {
+    text-align: left;
+}
+
+
