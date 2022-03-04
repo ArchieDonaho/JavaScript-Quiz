@@ -2,8 +2,19 @@
     margin: 0;
     padding: 0;   
     box-sizing: border-box;
-    /* border: 1px solid black; */
     font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+:root {
+    --main-border: 2px solid gray;
+    --background-color: #ade8ff;
+    --title-color: #cefffd;
+    --body-background-color: #ebfaff;
+}
+
+body{
+    background-color: var(--body-background-color);
 }
 
 .display-none {
@@ -22,24 +33,192 @@ header {
 .header-small {
     flex: 1;
     font-size: 40px;
+    background: none;
+    border-bottom: var(--main-border);
+}
+
+#highscore {
+    cursor: pointer;
+    border: var(--main-border);
+}
+
+#turn-off {
+    border: var(--main-border);;
+}
+
+#highscore:hover {
+    text-shadow: 0 0 1px;
+    background-color: var(--background-color);
 }
 
 .header-big {
     flex: 3;
     font-size: 60px;
+    background-color: var(--title-color);
+    border-bottom: var(--main-border);
+}
+
+#time {
+    border-left: var(--main-border);
+    border-bottom: var(--main-border);
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#time-left {
+    padding-left: 5px;
 }
 
 main {
     text-align: center;
     margin: 5% 15%;
+    border-radius: 1vw;
+    flex-direction: column;
 }
 
 main > * {
     padding: 20px;
 }
 
-#description, #answer-list {
-    text-align: left;
+#title {
+    border-top: var(--main-border);
+    border-left: var(--main-border);
+    border-right: var(--main-border);
+    border-top-left-radius: 1vw;
+    border-top-right-radius: 1vw;
+    font-size: 38px;
+    background-color: var(--title-color);
 }
 
+#description {
+    border-left: var(--main-border);
+    border-right: var(--main-border);
+    background-color: var(--background-color);
 
+}
+
+#initial-id {
+    border-left: var(--main-border);
+    border-right: var(--main-border);
+    border-bottom: var(--main-border);
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+    background-color: var(--background-color);
+
+}
+
+#description, #answer-list {
+    text-align: center;
+}
+
+#answer-list {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    border-left: var(--main-border);
+    border-right: var(--main-border);
+    border-bottom: var(--main-border);
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+}
+
+.button {
+    border-radius: .8vw;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 3px;
+    margin-top: 20px;
+    cursor: pointer;
+    background-color: var(--title-color);
+}
+
+.button:hover {
+    border: 2px solid rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 1px;
+    background-color: var(--background-color);
+}
+
+.answer-button {
+    padding: 20px;
+    margin: 10px;
+    background-color: azure;
+    font-size: 23px;
+    border: var(--main-border);
+}
+
+.answer-button:hover {
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
+    background-color: #e6f3ff;
+}
+
+.answer-button:active {
+    box-shadow: 2px 2px rgba(0, 0, 0, 1);
+    background-color: #d3e9ff;
+}
+
+.response {
+    position: absolute;
+    width: 70%;
+    text-align: center;
+    background-color: var(--body-background-color);
+    font-size: 40px;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+#correct-response {
+    color: green;
+}
+
+#incorrect-response {
+    color: red;
+}
+
+.form {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.form-box {
+    text-align: center;
+    border-radius: .5vw;
+    border: var(--main-border);
+}
+
+.form-box:active {
+    border: 2px solid black;
+}
+
+button[type='submit'] {
+    width: 30%;
+}
+
+#highscore-list {
+    border-right: var(--main-border);
+    border-left: var(--main-border);
+    border-bottom: var(--main-border);
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+}
+
+.score-list {
+    width: 40%;
+    margin: 5px auto;
+    border-bottom: 1px solid black;
+}
+
+@media screen and (max-width: 900px) {
+    header {
+        flex-direction: column;
+    }
+
+    .header-big {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .header-small {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+}

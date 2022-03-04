@@ -1,33 +1,93 @@
 //declare the questions array, which holds each question and answer
 var questions = [{
     title: "Question 1",
-    question: "this is question 1",
-    answers: ["q1a1", "q1a2", "q1a3", "q1a4"],
-    correctAnswer: 3
+    question: "If we declare variable 'x = 4', which of these statements is NOT 'true'",
+    answers: ["x <= x++",
+              "!( (x + 4) * x  === 'sixteen'",
+              "x >= x--",
+              "!(x === 4) || x = 30"],
+    correctAnswer: 1
 },
 {
     title: "Question 2",
-    question: "this is question 2",
-    answers: ["q2a1", "q2a2", "q2a3", "q2a4"],
-    correctAnswer: 0
+    question: 'If we have: 5 === "5", which of these is true for the result',
+    answers: ["true",
+              "false",
+              "null",
+              "undefined"],
+    correctAnswer: 1
 },
 {
     title: "Question 3",
-    question: "this is question 3",
-    answers: ["q3a1", "q3a2", "q3a3", "q3a4"],
-    correctAnswer: 1
-},
-{
-    title: "Question 4",
-    question: "this is question 4",
-    answers: ["q4a1", "q4a2", "q4a3", "q4a4"],
+    question: "If we declare 'var x=5' within a function, can we use 'x' in another function and why",
+    answers: ["yes, because it is a global variable", 
+              "yes, because it is a local variable",
+              "no, because it is a local variable",
+              "no, because it is a global variable"],
     correctAnswer: 2
 },
 {
+    title: "Question 4",
+    question: "Assuming we have array 'myArray', how may we obtain the length of the array",
+    answers: ["length().myArray;",
+              "myArray.length;",
+              "length.myArray;",
+              "myArray.length();"],
+    correctAnswer: 3
+},
+{
     title: "Question 5",
-    question: "this is question 5",
-    answers: ["q5a1", "q5a2", "q5a3", "q5a4"],
+    question: "What does '14 % 5' equate to",
+    answers: ["4",
+              "6",
+              "2.4",
+              "2.8"],
+    correctAnswer: 0
+},
+{
+    title: "Question 6",
+    question: "How can you refer to a specific index of array 'myArray'",
+    answers: ["myArray.indexOf(4);",
+              "myArray[4];",
+              "indexOf(myArray);",
+              "myArray.[4];"],
     correctAnswer: 1
+},
+{
+    title: "Question 7",
+    question: 'A while-loop with condition (a <= b) will run until',
+    answers: ["a > b",
+              "a = b",
+              "a <= b",
+              "a != b"],
+    correctAnswer: 0
+},
+{
+    title: "Question 8",
+    question: "Using the DOM method, if we have 'var mainEl', how may we obtain the class value",
+    answers: ["mainEl.setAttribute('class');",
+              "mainEl.getAttribute();",
+              "mainEl.getAttribute('class');",
+              "mainEl.getClass('class');"],
+    correctAnswer: 2
+},
+{
+    title: "Question 9",
+    question: "Assuming we have 'var formBoxEl = document.querySelector('input[class='form-box']').value', which of these is true",
+    answers: ["formBoxEl has a class of 'form-box'",
+              "formBoxEl is an element", 
+              "formBoxEl.getAttribute('class') == 'form-box'", 
+              "formBoxEl is ewual to whatever value was entered in the element box"],
+    correctAnswer: 3
+},
+{
+    title: "Question 10",
+    question: "myEl.addEventListener('click', function(){}); does what?",
+    answers: ["runs the funtion until myEl is clicked",
+              "looks for an event listener with the class 'click', and wil run the function when it finds it",
+              "looks for a click in myEl, and will run the function when clicked",
+              "adds an id called 'click' to myEl"],
+    correctAnswer: 2
 }];
 
 
@@ -43,7 +103,7 @@ var changedAttributeEl = changeEl.getAttribute("id");
 //allows functions to cancel the timer if called
 var stopTimer;
 //set the time that users have to complete the quiz
-var time = 60
+var time = 100;
 var timer = time;
 //set the high score array that holds the user's highscores
 var highScore = [];
@@ -54,19 +114,21 @@ var userScore = 0;
 
 
 //used when the quiz timer msut start
-var startCountdown = function(stop){
+var startCountdown = function(){
     var counter = setInterval(function(){
         timeLeftEl.textContent = timer;
         timer--;
         
-        if (timer === 0) {
+        if (timer <= 0) {
             clearInterval(counter);
             timeLeftEl.textContent = "Times Up!";
             timer = time;
+            //bring the user to the setScore screen
+            setScore(userScore);
             return;
         };    
     }, 1000);
-    //allows other functions to end the countdown
+    //allows other functions to end the countdown outside of the function
     stopTimer = counter;
 };
 
@@ -75,13 +137,16 @@ var loadScores = function(){
     //retireve the highScore array
     highScore = localStorage.getItem("High Score");
     highScore = JSON.parse(highScore);
+    //if highScore returns as null, reset the array so that it can be filled later on without error
+    if(highScore == null){
+        highScore = [];
+    };
 };
 
 //lets the user view the list of highscores
 var viewScores = function(){
-    // //load the scores
-    loadScores();
-
+    //disable the toScoreEl button
+    toScoreEl.setAttribute("id", "turn-off");
     //remove the start button, if there
     var startButtonEl = document.getElementById("start-button");
     if(startButtonEl !== null){
@@ -100,15 +165,10 @@ var viewScores = function(){
 
     //remove any text content
     changeEl.textContent = "";
-    
-    //add the highscore list, if there are highscores saved
-    if(!highScore){
-        //let the user know that there is no score to save
-        var noScoreList = document.createElement("div");
-        noScoreList.setAttribute("class", "no-list");
-        noScoreList.textContent = "Play a round to set your score"
-        unorderedEl.appendChild(changeEl);
-    } else {
+
+    //generate the highscore list, if there are highscores saved in the array
+    if(highScore[0] != undefined){
+        loadScores();
         //generate a ordered list
         var unorderedEl = document.createElement("ol");
         changeEl.appendChild(unorderedEl);
@@ -121,7 +181,13 @@ var viewScores = function(){
             highScoreList[i].textContent = highScore[i].name + " - " + highScore[i].score;
             unorderedEl.appendChild(highScoreList[i]);
         };
-    };
+    } else {
+        //if there are no scores saved, let the user know that there is no score to show
+        var noScoreList = document.createElement("div");
+        noScoreList.setAttribute("class", "no-list");
+        noScoreList.textContent = "No scores set! Play a round to set a score"
+        changeEl.appendChild(noScoreList);
+    }
 
     //change the id of changeEl
     changeEl.setAttribute("id", "highscore-list");
@@ -129,7 +195,7 @@ var viewScores = function(){
 
     //generate a button that will bring the user back to the home screen
     var backButtonEl = document.createElement("button");
-    backButtonEl.setAttribute("class", "submit-button");
+    backButtonEl.setAttribute("class", "button");
     backButtonEl.setAttribute("id", "back-button");
     backButtonEl.textContent = "Back";
     mainEl.appendChild(backButtonEl);
@@ -139,7 +205,6 @@ var viewScores = function(){
 
 //sets the score to be added to the list of leaderboards
 var setScore = function(score){
-    window.event.preventDefault();
     //stop the timer
     clearInterval(stopTimer);
 
@@ -170,6 +235,7 @@ var setScore = function(score){
 
     var formSubmitEl = document.createElement("button");
     formSubmitEl.setAttribute("type", "submit");
+    formSubmitEl.setAttribute("class", "button");
     formSubmitEl.textContent = "Add";
 
     changeEl.appendChild(formEl);
@@ -193,7 +259,6 @@ var setScore = function(score){
     });
 };
 
-
 var saveScore = function(myScoreObject){
     //save the username and score in the highScore array
     window.event.preventDefault();
@@ -214,9 +279,11 @@ var homePage = function(){
     //clear & reset the timer
     timeLeftEl.textContent = "";
     timer = time;
+    //enable the toScoreEl button
+    toScoreEl.setAttribute("id", "highscore");
     //set the title and description
-    titleEl.textContent = "Here are the rules";
-    descriptionEl.textContent = "Each correct answer will award ponts. For every incorrect answer, no points will be added or deducted. Finishing faster will award more points, but finishing after the timer ends will award no extra points. This will be a true test of your skill. Good luck and have fun.";
+    titleEl.textContent = "Rules";
+    descriptionEl.textContent = "Each correct answer will award 50 ponts. For every incorrect answer, 10 seconds will be deducted from the timer. Finishing before the timer ends will award bonus points, but once the timer hits 0 the game end and award no extra points. This will be a test of knowledge and speed. Good luck and have fun.";
     //change the value of changEl so it doesnt call the quiz functions
     changeEl.removeAttribute("id");
     changedAttributeEl = changeEl.getAttribute("id");
@@ -232,6 +299,7 @@ var homePage = function(){
     var startButtonEl = document.createElement("button");
     startButtonEl.textContent = "Start";
     startButtonEl.setAttribute("id", "start-button");
+    startButtonEl.setAttribute("class", "button");
 
     mainEl.appendChild(startButtonEl);
 
@@ -241,7 +309,7 @@ var homePage = function(){
 
     //bring user to highscore page, if they are not already there
     toScoreEl.addEventListener("click", function(){
-        if(changeEl.getAttribute("id") !== "highscore-list"){
+        if(toScoreEl.getAttribute("id") == "highscore"){
             viewScores();
         };
     });
@@ -275,6 +343,8 @@ var initializeQuizAnswers = function(step){
 
 //used to initially generate the quiz
 var initializeQuiz = function(){
+    //disable the toScoreEl button
+    toScoreEl.setAttribute("id", "turn-off");
     //initialize user score & step
     userScore = 0;
     step = 0;
@@ -308,56 +378,51 @@ var deleteResponse = function(){
     responseEl.remove();
 };
 
-//checks the answer for right or wrong
-var quizResponse = function(){  
+// //checks the answer for right or wrong
+var quizResponse = function(){
     var targetEl = window.event.target;
-    //compare the input element vs the correct answer
+    var responseEl = document.createElement("div");
+    responseEl.setAttribute("class", "response");
+    mainEl.appendChild(responseEl);
+    
+    //delete the response after a few seconds
+    var timedResponse = setTimeout(deleteResponse, 2000);
+    timedResponse;
+
+    //generates a resonse based on the input
     if(targetEl.dataset.answer == questions[step].correctAnswer){
-        //generates a corect response
-        var responseEl = document.createElement("div");
-        responseEl.textContent = "correct";
-        responseEl.setAttribute("class", "response");
-        mainEl.appendChild(responseEl);
-        //delete the response after a few seconds
-        var timedResponse = setTimeout(deleteResponse, 2000);
-        timedResponse;
-        userScore++;
-        //check to see if we have hit the end of the questions
-        step++;
-        if(step === questions.length){
-            //add the timer to the score
-            userScore = userScore + timer;
-            //send them to the setScore page to put in their final score
-            setScore(userScore);
-        } else {
-            // move to the next question
-            reSetQuiz(step);
-        };
+        responseEl.textContent = "Correct";
+        responseEl.setAttribute("id", "correct-response");
+        //add points
+        userScore+= 50;
+
     } else if(targetEl.dataset.answer != questions[step].correctAnswer !== targetEl.matches("#answer-list")){
-        //generate an incorrect respinse
-        var responseEl = document.createElement("div");
-        responseEl.textContent = "incorrect";
-        responseEl.setAttribute("class", "response");
-        mainEl.appendChild(responseEl);
-        //delete the response after a few seconds
-        var timedResponse = setTimeout(deleteResponse, 2000);
-        timedResponse;
-        //check to see if we have hit the end of the questions
-        step++;
-        if(step === questions.length){
-            //add the timer to the score
-            userScore = userScore + timer;
-            //send them to the setScore page to put in their final score
-            setScore(userScore);
-        } else {
-            // move to the next question
-            reSetQuiz(step);
-        };
+        responseEl.textContent = "Incorrect, Time Deducted";
+        responseEl.setAttribute("id", "incorrect-response");
+        //deduct time
+        timer -= 10;
+    }; 
+    //check to see if we have hit the end of the questions
+    step++;
+    if(step === questions.length){
+        //add the timer to the score
+        console.log(userScore + " + " + timer);
+        timeLeftEl.textContent = timer;
+        userScore = userScore + timer;
+        console.log(userScore);
+        //send them to the setScore page to put in their final score
+        setScore(userScore);
+    } else {
+        // move to the next question
+        reSetQuiz(step);
     };
-};
+}
 
 ///set up the home page
 homePage();
+
+//pre-load the highscores
+loadScores();
 
 //look for a click in the changeEl element. depending on the id value, it will perform different functions
 changeEl.addEventListener("click", function(){
@@ -366,18 +431,7 @@ changeEl.addEventListener("click", function(){
     initializeQuiz();
     } else if(changedAttributeEl == "answer-list"){
     //check the quiz response
+    // quizResponse();
     quizResponse();
     };
 });
-
-
-
-
-
-
-
-
-
-
-
-
