@@ -430,8 +430,11 @@ changeEl.addEventListener("click", function(){
     //initialize the quiz format
     initializeQuiz();
     } else if(changedAttributeEl == "answer-list"){
-    //check the quiz response
-    // quizResponse();
-    quizResponse();
+        //check if a button was clicked
+        var targetEl = window.event.target;
+        if(targetEl.className == "answer-button"){
+            //check the quiz response
+            quizResponse();
+        };
     };
 });
